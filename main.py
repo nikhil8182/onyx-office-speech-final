@@ -30,7 +30,7 @@ def say(text):
     voiceId = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0"
     engine = pyttsx3.init()
     engine.setProperty('voice', voiceId)
-    engine.setProperty('rate', 140)
+    engine.setProperty('rate', 170)
     engine.say(text)
     engine.runAndWait()
     voices = engine.getProperty('voices')
@@ -42,11 +42,9 @@ def say(text):
     #     engine.runAndWait()
     #     engine.stop()
 
-
 def powerSavingMode():
     # turn off 3D printer, main pc, design pc
     pass
-
 
 def ebState():
     global ebOfflineTime, ebOfflineAnounced, ebOnlineAnounced, ebOffline30MinAnnounced, ebOffline35MinAnnounced, ebOffline15MinAnnounced
@@ -91,10 +89,9 @@ def ebState():
             ebOffline35MinAnnounced = True
     # print("end of eb")
 
-
 def announceFingerPrint():
     todaysDate = datetime.datetime.now().date()
-    _currenttime = datetime.datetime.now().strftime("%H%M%S")
+    _currenttime = datetime.datetime.now().strftime("%H%M")
     fingerprintData = db.child('fingerPrint').get().val()
 
     for uid in fingerprintData:
@@ -109,6 +106,11 @@ def announceFingerPrint():
                     print(name)
                     say('welcome ' + name)
                     db.child('fingerPrint').child(uid).child(todaysDate).child(_inTime).update({"announce": True})
+                    if int(_currenttime) > 930:
+                        _lt = int(_currenttime)-930
+                        say('you are late for {} minutes'.format(_lt))
+
+
         except:
             pass
     # print("end of finger print")
@@ -139,7 +141,6 @@ def announceFingerPrint():
     #             if int(fingerprintEntryTime) > int(entryTime):
     #                 min = int(fingerprintEntryTime) - int(entryTime)
     #                 say("try to be in office before {} minuets next day ".format(str(min)))
-
 
 def tabStatus():
     global tabAnnounce
