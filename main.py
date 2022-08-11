@@ -42,9 +42,11 @@ def say(text):
     #     engine.runAndWait()
     #     engine.stop()
 
+
 def powerSavingMode():
     # turn off 3D printer, main pc, design pc
     pass
+
 
 def ebState():
     global ebOfflineTime, ebOfflineAnounced, ebOnlineAnounced, ebOffline30MinAnnounced, ebOffline35MinAnnounced, ebOffline15MinAnnounced
@@ -89,6 +91,7 @@ def ebState():
             ebOffline35MinAnnounced = True
     # print("end of eb")
 
+
 def announceFingerPrint():
     todaysDate = datetime.datetime.now().date()
     _currenttime = datetime.datetime.now().strftime("%H%M")
@@ -107,8 +110,16 @@ def announceFingerPrint():
                     say('welcome ' + name)
                     db.child('fingerPrint').child(uid).child(todaysDate).child(_inTime).update({"announce": True})
                     if int(_currenttime) > 930:
-                        _lt = int(_currenttime)-930
-                        say('you are late for {} minutes'.format(_lt))
+                        _lt = int(_currenttime) - 930
+                        hours_total = _lt // 60
+                        minutes_total = _lt % 60
+                        if hours_total == 0:
+                            time_string = "{} minutes".format(minutes_total)
+                        elif hours_total == 1:
+                            time_string = "{} hour and {} minutes".format(hours_total, minutes_total)
+                        else:
+                            time_string = "{} hours and {} minutes".format(hours_total, minutes_total)
+                        say('you are late for {}'.format(time_string))
 
 
         except:
@@ -142,27 +153,30 @@ def announceFingerPrint():
     #                 min = int(fingerprintEntryTime) - int(entryTime)
     #                 say("try to be in office before {} minuets next day ".format(str(min)))
 
+
 def tabStatus():
     global tabAnnounce
     tab_status = requests.get("http://192.168.1.18/tab/1/").json()
     battery = tab_status['Tab_Charge']
     if battery < 50:
-
-        if 20 < battery >= 30 and tabAnnounce:
+        if battery == 30 and tabAnnounce:
             say("Prem Tab battery is 30, Kindly charge the tab")
             tabAnnounce = False
-        if 15 < battery >= 20 and tabAnnounce:
+        if battery == 20 and tabAnnounce:
             say("Prem Tab battery is 20, Kindly charge the tab")
             tabAnnounce = False
-        if 10 < battery <= 15 and tabAnnounce:
+        if battery == 15 and tabAnnounce:
             say("Prem Tab battery is less than 15, Kindly charge the tab")
             tabAnnounce = False
-        if battery < 10 and tabAnnounce:
+        if battery == 10 and tabAnnounce:
             say("Prem Tab battery is less than 10, Kindly charge the tab")
             tabAnnounce = False
-        if battery < 5 and tabAnnounce:
+        if battery == 5 and tabAnnounce:
             say("Prem Tab battery is less than 5, Kindly charge the tab")
             tabAnnounce = False
+    else:
+        print("Tab is greater than 50")
+
 
 def announce():
     data = db.child('onyx').get().val()
