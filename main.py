@@ -3,7 +3,7 @@ import time
 import pyrebase
 import pyttsx3
 import requests
-
+# changes by koushik
 ebOfflineAnounced = False
 ebOnlineAnounced = False
 ebOffline15MinAnnounced = False
@@ -96,30 +96,41 @@ def announceFingerPrint():
     todaysDate = datetime.datetime.now().date()
     _currenttime = datetime.datetime.now().strftime("%H%M")
     fingerprintData = db.child('fingerPrint').get().val()
-
     for uid in fingerprintData:
         try:
-            # print(fingerprintData[uid][str(todaysDate)])
             for _inTime in fingerprintData[uid][str(todaysDate)]:
-                # print(_inTime)
                 announced = fingerprintData[uid][str(todaysDate)][_inTime]['announce']
-                # print(announced)
                 if not announced:
                     name = fingerprintData[uid]['name']
                     print(name)
                     say('welcome ' + name)
                     db.child('fingerPrint').child(uid).child(todaysDate).child(_inTime).update({"announce": True})
+                    # if int(_currenttime) > 930:
+                    #     _lt = int(_currenttime) - 930
+                    #     hours_total = _lt // 60
+                    #     minutes_total = _lt % 60
+                    #     if hours_total == 0:
+                    #         time_string = "{} minutes".format(minutes_total)
+                    #     elif hours_total == 1:
+                    #         time_string = "{} hour and {} minutes".format(hours_total, minutes_total)
+                    #     else:
+                    #         time_string = "{} hours and {} minutes".format(hours_total, minutes_total)
+                    #     say('you are late for {}'.format(time_string))
                     if int(_currenttime) > 930:
-                        _lt = int(_currenttime) - 930
-                        hours_total = _lt // 60
-                        minutes_total = _lt % 60
-                        if hours_total == 0:
-                            time_string = "{} minutes".format(minutes_total)
-                        elif hours_total == 1:
-                            time_string = "{} hour and {} minutes".format(hours_total, minutes_total)
+                        time1 = datetime.datetime.strptime('09:30', '%H:%M').time()
+                        a = str(datetime.datetime.now().time().hour)+":"+str(datetime.datetime.now().time().minute)
+                        time2 = datetime.datetime.strptime(a, '%H:%M').time()
+                        mins1 = (time1.minute + 60 * time1.hour)
+                        mins2 = (time2.minute + 60 * time2.hour)
+                        final_minutes = mins2 - mins1
+                        hours = final_minutes // 60
+                        minutes = final_minutes % 60
+                        if hours == 0:
+                            say(f"You are late for {minutes} minutes")
+                        elif hours == 1:
+                            say(f"You are late for {hours} hour and {minutes} minutes")
                         else:
-                            time_string = "{} hours and {} minutes".format(hours_total, minutes_total)
-                        say('you are late for {}'.format(time_string))
+                            say(f"You are late for {hours} hours and {minutes} minutes")
 
 
         except:
