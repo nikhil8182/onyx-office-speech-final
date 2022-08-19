@@ -11,6 +11,7 @@ ebOffline30MinAnnounced = False
 ebOffline35MinAnnounced = False
 ebOfflineTime = ""
 tabAnnounce = True
+refreshmentAnnounce = True
 
 config = {
     "apiKey": "AIzaSyCMp8OJqHy8CkWr6AfYZ0DMMi40wKI98VM",
@@ -185,7 +186,19 @@ def announce():
         say(onyxAnounncement)
         db.child('onyx').update({'announcement': 0})
     # print("end of announce")
-
+def refreshment():
+    global refreshmentAnnounce
+    if datetime.datetime.now().strftime("%H:%M") == "10:01" and refreshmentAnnounce:
+        say("Kindly place your prefered refreshment")
+        refreshmentAnnounce = False
+    if datetime.datetime.now().strftime("%H:%M") == "10:02" and not refreshmentAnnounce:
+        refreshmentAnnounce = True
+    if datetime.datetime.now().strftime("%H:%M") == "15:01" and refreshmentAnnounce:
+        say("Kindly place your prefered refreshment")
+        refreshmentAnnounce = False
+    if datetime.datetime.now().strftime("%H:%M") == "15:02" and not refreshmentAnnounce:
+        refreshmentAnnounce = True
+        
 
 while True:
     currentTime = datetime.datetime.now().strftime('%I:%M:%S %p')
@@ -196,6 +209,7 @@ while True:
         ebState()
         announceFingerPrint()
         tabStatus()
+        refreshment()
 
     except Exception as e:
         print("error at ", e)
