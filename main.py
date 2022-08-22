@@ -175,8 +175,7 @@ def tabStatus():
         if battery == 5 and tabAnnounce:
             say("Prem Tab battery is less than 5, Kindly charge the tab")
             tabAnnounce = False
-    else:
-        print("Tab is greater than 50")
+
 
 
 def announce():
@@ -186,15 +185,81 @@ def announce():
         say(onyxAnounncement)
         db.child('onyx').update({'announcement': 0})
     # print("end of announce")
+
+
+def getPresentList():
+    todaysDate = str(datetime.datetime.now().date())
+    # absentList = []
+    presentList = []
+    fp = db.child('fingerPrint').get().val()
+    data = db.child('staff').get().val()
+
+    for staff in data:
+        if not data[staff]['department'] == 'ADMIN':
+            try:
+                fp[staff][todaysDate]
+                presentList.append(data[staff]['name'])
+            except:
+                pass
+                # try:
+                #     data[staff]['partTime']
+                #     pass
+                # except:
+                #     absentList.append(data[staff]['name'])
+
+    return presentList
+
+def getEnteredList():
+    refList = []
+    ref_data = db.child('refreshments').get().val()
+    todaysDate = str(datetime.datetime.now().date())
+    if int(datetime.datetime.now().strftime("%H%M")) < 1010:
+        try:
+            fn_data = ref_data[todaysDate]['FN']
+            for option in fn_data:
+                try:
+                    for names in fn_data[option]:
+                        refList.append(fn_data[option][names])
+                except:
+                    pass
+        except:
+            pass
+    else:
+        try:
+            an_data = ref_data[todaysDate]['AN']
+            for option in an_data:
+                try:
+                    for names in an_data[option]:
+                        refList.append(an_data[option][names])
+                except:
+                    pass
+        except:
+            pass
+
+    return refList
+
+
+def getRefreshmentList():
+    listToAnnounce = []
+    presentList = getPresentList()
+    enteredList = getEnteredList()
+    for p in presentList:
+        if not p in enteredList:
+            listToAnnounce.append(p) 
+    return listToAnnounce
+
+
 def refreshment():
     global refreshmentAnnounce
     if datetime.datetime.now().strftime("%H:%M") == "10:01" and refreshmentAnnounce:
-        say("Kindly place your prefered refreshment")
+        l = getRefreshmentList()
+        say(f"Hello Team, Kindly place your prefered refreshment {l}")
         refreshmentAnnounce = False
     if datetime.datetime.now().strftime("%H:%M") == "10:02" and not refreshmentAnnounce:
         refreshmentAnnounce = True
     if datetime.datetime.now().strftime("%H:%M") == "15:01" and refreshmentAnnounce:
-        say("Kindly place your prefered refreshment")
+        l = getRefreshmentList()
+        say(f"Hello Team, Kindly place your prefered refreshment {l}")
         refreshmentAnnounce = False
     if datetime.datetime.now().strftime("%H:%M") == "15:02" and not refreshmentAnnounce:
         refreshmentAnnounce = True
