@@ -65,6 +65,7 @@ def ebState():
 
     if ebState and not ebOnlineAnounced:
         say("External power supply in office is restored")
+        print('external power suypply in office is restored')
         ebOfflineAnounced = False
         ebOffline30MinAnnounced = False
         ebOffline35MinAnnounced = False
