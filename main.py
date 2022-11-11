@@ -35,7 +35,7 @@ db = firebase.database()
 #     engine.say("Hello World!")
 #     engine.runAndWait()
 #     engine.stop()
-
+#todo : check
 def say(text):
     voiceId = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0"
     engine = pyttsx3.init()
