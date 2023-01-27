@@ -37,13 +37,13 @@ db = firebase.database()
 #     engine.stop()
 #todo : check
 def say(text):
-    voiceId = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0"
+    # voiceId = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0"
     engine = pyttsx3.init()
-    engine.setProperty('voice', voiceId)
-    engine.setProperty('rate', 140)
+    engine.setProperty('voice', 0)
+    engine.setProperty('rate', 100)
     engine.say(text)
     engine.runAndWait()
-    voices = engine.getProperty('voices')
+    # voices = engine.getProperty('voices')
     # for voice in voices:
     #     print(voice, voice.id)
     #     engine.setProperty('voice', voice.id)
@@ -117,7 +117,7 @@ def announceFingerPrint():
                 if not announced:
                     name = fingerprintData[uid]['name']
                     print(name)
-                    say('welcome ' + name)
+                    say('welcome ' + name + ' have a great day')
                     db.child('fingerPrint').child(uid).child(todaysDate).child(_inTime).update({"announce": True})
         except:
             pass
@@ -260,7 +260,7 @@ def refreshment():
                 pass
 
 
-refreshment()
+# refreshment()
 
 
 def announce():
@@ -280,9 +280,10 @@ while True:
         announce()
         ebState()
         announceFingerPrint()
-        tabStatus()
+        # tabStatus()
         if datetime.datetime.now().strftime("%H:%M:%S") == ("10:45:01" or "14:45:01"):
             refreshment()
+
 
     except Exception as e:
         print("error at ", e)
