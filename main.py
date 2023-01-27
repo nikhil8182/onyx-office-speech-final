@@ -10,7 +10,7 @@ ebOffline30MinAnnounced = False
 ebOffline35MinAnnounced = False
 ebOfflineTime = ""
 tabAnnounce = True
-
+#8:06 27/1/2023
 config = {
     "apiKey": "AIzaSyCMp8OJqHy8CkWr6AfYZ0DMMi40wKI98VM",
     "authDomain": "marketing-data-d141d.firebaseapp.com",
@@ -35,7 +35,7 @@ db = firebase.database()
 #     engine.say("Hello World!")
 #     engine.runAndWait()
 #     engine.stop()
-#todo : check
+# todo : check
 def say(text):
     # voiceId = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0"
     engine = pyttsx3.init()
@@ -262,8 +262,6 @@ def refreshment():
 
 # refreshment()
 def resetEnergyMonitor():
-
-
     requests.put("http://192.168.1.18/eb/1",
                  data={
                      "id": 1,
@@ -278,6 +276,7 @@ def resetEnergyMonitor():
                      "UPS_Battery": 0
                  })
 
+
 def announce():
     data = db.child('onyx').get().val()
     onyxAnounncement = data['announcement']
@@ -285,6 +284,7 @@ def announce():
         say(onyxAnounncement)
         db.child('onyx').update({'announcement': 0})
     # print("end of announce")
+
 
 schedule.every(5).minutes.do(resetEnergyMonitor())
 while True:
