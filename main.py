@@ -1,4 +1,4 @@
-import datetime
+import datetime, schedule
 import pyrebase
 import pyttsx3
 import requests
@@ -261,7 +261,22 @@ def refreshment():
 
 
 # refreshment()
+def resetEnergyMonitor():
 
+
+    requests.put("http://192.168.1.18/eb/1",
+                 data={
+                     "id": 1,
+                     "R_Current": 0,
+                     "Y_Current": 0,
+                     "B_Current": 0,
+                     "R_Voltage": 0,
+                     "Y_Voltage": 0,
+                     "B_Voltage": 0,
+                     "UPS_Voltage": 0,
+                     "UPS_Current": 0.0,
+                     "UPS_Battery": 0
+                 })
 
 def announce():
     data = db.child('onyx').get().val()
@@ -271,12 +286,13 @@ def announce():
         db.child('onyx').update({'announcement': 0})
     # print("end of announce")
 
-
+schedule.every(5).minutes.do(resetEnergyMonitor())
 while True:
     currentTime = datetime.datetime.now().strftime('%I:%M:%S %p')
     print(currentTime)
 
     try:
+        schedule.run_pending()
         announce()
         ebState()
         announceFingerPrint()
