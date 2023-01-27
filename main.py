@@ -34,7 +34,7 @@ def say(text):
     engine.setProperty('rate', 100)
     engine.say(text)
     engine.runAndWait()
-    voices = engine.getProperty('voices')
+    # voices = engine.getProperty('voices')
     # for voice in voices:
     #     print(voice, voice.id)
     #     engine.setProperty('voice', voice.id)
