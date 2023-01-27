@@ -28,10 +28,10 @@ db = firebase.database()
 
 
 def say(text):
-    voiceId = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0"
+    # voiceId = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0"
     engine = pyttsx3.init()
-    engine.setProperty('voice', voiceId)
-    engine.setProperty('rate', 170)
+    engine.setProperty('voice', 0)
+    engine.setProperty('rate', 100)
     engine.say(text)
     engine.runAndWait()
     voices = engine.getProperty('voices')
