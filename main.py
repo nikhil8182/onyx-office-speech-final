@@ -3,6 +3,9 @@ import time
 import pyrebase
 import pyttsx3
 import requests
+from gtts import gTTS
+import os
+
 # changes by koushik
 ebOfflineAnounced = False
 ebOnlineAnounced = False
@@ -28,12 +31,17 @@ db = firebase.database()
 
 
 def say(text):
+    tts = gTTS(text)
+    tts.save("speech.mp3")
+
+    # Play the speech using the default media player
+    os.system("mpg321 speech.mp3")
     # voiceId = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0"
-    engine = pyttsx3.init()
-    engine.setProperty('voice', 0)
-    engine.setProperty('rate', 100)
-    engine.say(text)
-    engine.runAndWait()
+    # engine = pyttsx3.init()
+    # engine.setProperty('voice', 0)
+    # engine.setProperty('rate', 100)
+    # engine.say(text)
+    # engine.runAndWait()
     # voices = engine.getProperty('voices')
     # for voice in voices:
     #     print(voice, voice.id)
