@@ -5,7 +5,7 @@ import pyttsx3
 import requests
 from gtts import gTTS
 import os
-# changes from koushik's mac #asdfasdf
+# changes from koushik's mac
 # changes by koushik
 ebOfflineAnounced = False
 ebOnlineAnounced = False
